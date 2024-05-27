@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest'
     permissions:
       contents: read
-      packages: write # Allow CI to write to the GitHub Container Registry
+      packages: write # Allow CI to write 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,8 +20,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner_id }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Compute image in lowercase
+        id: compute
+        run: |
+          image_lower=$(echo "ghcr.io/${{ github.repository }}/app:latest" | tr '[:upper:]' '[:lower:]')
+          echo "image=$image_lower" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/${{ github.repository }}/app:latest
+          tags: ${{ steps.compute.outputs.image }}
