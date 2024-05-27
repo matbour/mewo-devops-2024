@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
 
+env:
+  app: nextjs-app
+
 jobs:
   build:
     name: Build Docker image
@@ -25,12 +28,12 @@ jobs:
           registry: europe-west9-docker.pkg.dev
           username: _json_key
           password: ${{ secrets.GCLOUD_AUTH }}
+      - name: Lowercase actor
+        id: actor
+        run: echo "lower=$(echo ${{ github.actor }} | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
       - name: Compute image
         id: compute
-        run: |
-          image="${{ vars.REGISTRY }}/${{ github.actor }}-app:latest"
-          image_lower=$(echo $image | tr '[:upper:]' '[:lower:]')
-          echo "image=$image_lower" >> "$GITHUB_OUTPUT"
+        run: echo "image=${{ vars.REGISTRY }}/${{ steps.actor.outputs.lower }}-${{ env.app }}:latest" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
@@ -41,5 +44,5 @@ jobs:
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ${{ github.actor }}-nextjs-app
+          service: ${{ steps.actor.outputs.lower }}-${{ env.app }}
           image: ${{ steps.compute.outputs.image }}
