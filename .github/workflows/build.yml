@@ -21,9 +21,9 @@ jobs:
         id: compute_image
         run: |
           image_lower=$(echo "ghcr.io/${{ github.repository }}/next-server-demo/app:latest" | tr '[:upper:]' '[:lower:]')
-          echo "image=$image_lower" >> "$GITHUB_ENV"
+          echo "image=$image_lower" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ env.image }}
+          tags: ${{ steps.compute_image.outputs.image }}
