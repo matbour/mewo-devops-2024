@@ -1,15 +1,12 @@
 FROM ubuntu:latest
 
-# Install the necessary dependencies and Mumble
-RUN apt-get update && apt-get install -y \
-  software-properties-common \
-  wget \
-  xz-utils \
-  wayland-xcomposite-glx\
-  mumble
+ARG DEBIAN_FRONTEND=noninteractive
 
-# Expose the default port of Mumble (note that this is unnecessary for the Mumble client)
+# Installer les dépendances nécessaires et compiler Mumble 
+RUN apt-get update &&  apt-get install mumble-server -y
+
+# Exposer le port par défaut de Murmur
 EXPOSE 64738
 
-# Command to start Mumble
-CMD ["mumble"]
+# Commande pour démarrer Murmur
+CMD ["murmurd", "-fg", "-v"]
