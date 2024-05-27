@@ -38,3 +38,8 @@ jobs:
           context: nextjs
           file: nextjs/Dockerfile
           tags: ${{ steps.compute.outputs.image }}
+      - name: Deploy to Google Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ github.actor }}-nextjs-app
+          image: ${{ steps.compute.outputs.image }}
