@@ -7,4 +7,4 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-RUN ls -al
+CMD ["npm", "run", "start"]
