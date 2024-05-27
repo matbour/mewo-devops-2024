@@ -17,8 +17,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Compute image in lowercase
+        id: compute_image
+        run: 
+          image=$(echo "ghcr.io/${{ github.repository }}/next-server-demo/app:latest" | tr '[:upper:]' '[:lower:]')
+          echo "image=$image" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/baldeal/next-server-demo/app:latest
+          tags: ${{ steps.compute_image.outputs.image }}
