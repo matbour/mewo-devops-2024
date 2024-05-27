@@ -1,4 +1,4 @@
-name: Build
+name: Deploy Next.js app to Google Cloud Run
 
 on:
   push:
@@ -35,4 +35,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          context: nextjs
+          file: nextjs/Dockerfile
           tags: ${{ steps.compute.outputs.image }}
