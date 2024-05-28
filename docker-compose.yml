@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 7070:5432
+  flask:
+    build:
+      context: flask
+    environment:
+      PORT: 3030
+    ports:
+      - 8081:3030
+  nextjs:
+    build:
+      context: nextjs
+    ports:
+      - 8080:3000
