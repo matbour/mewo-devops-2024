@@ -30,7 +30,7 @@ jobs:
         with:
           service: ${{ steps.actor.outputs.lower }}-${{ env.app }}
           image: mattermost/mattermost-team-edition
-          flags: --port=8065
+          flags: --port=8065 --no-cpu-throttling
           env_vars: |
             MM_USERNAME=admin
             MM_PASSWORD=admin
