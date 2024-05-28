@@ -1,21 +1,10 @@
 services:
-  postgres:
-    image: postgres:15-alpine
+  mattermost:
+    image: mattermost/mattermost-team-edition
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      MM_USERNAME: admin
+      MM_PASSWORD: admin
+      MM_DBNAME: mattermost
+      MM_SQLSETTINGS_DATASOURCE: postgres://bour:bour@35.239.186.51:5432/bour?sslmode=disable&connect_timeout=10
     ports:
-      - 7070:5432
-  flask:
-    build:
-      context: flask
-    environment:
-      PORT: 3030
-    ports:
-      - 8081:3030
-  nextjs:
-    build:
-      context: nextjs
-    ports:
-      - 8080:3000
+      - 8065:8065

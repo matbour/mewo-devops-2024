@@ -34,5 +34,5 @@ jobs:
           env_vars: |
             MM_USERNAME=admin
             MM_PASSWORD=admin
-            MM_DBNAME=mattermost
+            MM_DBNAME=bour
             MM_SQLSETTINGS_DATASOURCE=postgres://bour:bour@35.202.90.160:5432/bour?sslmode=disable&connect_timeout=10

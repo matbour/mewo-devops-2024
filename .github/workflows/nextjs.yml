@@ -2,7 +2,7 @@ name: Deploy Next.js app to Google Cloud Run
 
 on:
   push:
-    branches: [main]
+    branches: []
 
 env:
   app: nextjs-app
