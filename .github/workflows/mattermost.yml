@@ -1,0 +1,38 @@
+name: Deploy Mattermost to Google Cloud Run
+
+on:
+  push:
+    branches: [main]
+
+env:
+  app: mattermost
+
+jobs:
+  deploy:
+    name: Deploy Mattermost image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write # Allow CI to write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH }}
+      - name: Lowercase actor
+        id: actor
+        run: echo "lower=$(echo ${{ github.actor }} | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+      - name: Deploy to Google Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ steps.actor.outputs.lower }}-${{ env.app }}
+          image: mattermost/mattermost-team-edition
+          flags: --port=8065
+          env_vars: |
+            MM_USERNAME=admin
+            MM_PASSWORD=admin
+            MM_DBNAME=mattermost
+            MM_SQLSETTINGS_DATASOURCE=postgres://bour:bour@35.202.90.160:5432/bour?sslmode=disable&connect_timeout=10
